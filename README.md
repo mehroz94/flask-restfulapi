@@ -1,11 +1,10 @@
 # flask-restfulapi
 This is a simple User weight management REST API developed using flask-restful, JWT authentication and SQLAlchemy.
 
-This project has been developed using MySQL database.
+This project has been developed using MySQL database and the default database name is flask-api. You may update this in settings file.
 
 In order to initialize the db, use following commands by going into project directory:
 
-Python manage.py db init
 
 Python manage.py db upgrade
 
