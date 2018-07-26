@@ -72,7 +72,8 @@ class UserTestCase(unittest.TestCase):
         result_in_json = json.loads(res.data.decode('utf-8').replace("'", "\""))
         result = self.client().post('/userweight/', data={'weight': 89, 'user_id':int(result_in_json['user_id'])})
         self.assertEqual(result.status_code, 201)
-        weights = self.client().get('/user/{}/weight'.format(int(result_in_json['user_id'])))
+        weights = self.client().get('/user/{}/weight'.format(int(result_in_json['user_id'])),
+                                    headers={'Authorization': 'Bearer '+ result_in_json['access_token']})
         self.assertEqual(weights.status_code, 200)
 
     def tearDown(self):
