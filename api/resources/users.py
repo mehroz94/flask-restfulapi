@@ -3,7 +3,7 @@ from api.models import User, db, RevokedTokenModel
 from flask import request, jsonify
 from sqlalchemy.exc import SQLAlchemyError
 from marshmallow import ValidationError
-
+from utils import isolation_level
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 parser = reqparse.RequestParser()
 parser.add_argument('email', help='This field cannot be blank', required=True)
@@ -25,6 +25,7 @@ class UserListView(Resource):
     """ With thi API, We can get all users, user by id, delete and edit an user"""
 
     # Get all users.
+    @isolation_level(db, 'READ UNCOMMITTED')
     @marshal_with(resource_fields, envelope='users')
     def get(self):
         # Query the database and return all users
