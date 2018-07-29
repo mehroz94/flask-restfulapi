@@ -5,6 +5,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from marshmallow import ValidationError
 from utils import isolation_level
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
+from settings import ISOLATION_LEVEL
 parser = reqparse.RequestParser()
 parser.add_argument('email', help='This field cannot be blank', required=True)
 parser.add_argument('password', help='This field cannot be blank', required=True)
@@ -13,7 +14,7 @@ parser.add_argument('password', help='This field cannot be blank', required=True
 resource_fields = {
     'name': fields.String,
     'email': fields.String,
-    'gender': fields.String,
+    'gender': fields.String(attribute='gender.value'),
 }
 
 weight_resource_fields = {
@@ -25,7 +26,7 @@ class UserListView(Resource):
     """ With thi API, We can get all users, user by id, delete and edit an user"""
 
     # Get all users.
-    @isolation_level(db, 'READ UNCOMMITTED')
+    @isolation_level(db, ISOLATION_LEVEL)
     @marshal_with(resource_fields, envelope='users')
     def get(self):
         # Query the database and return all users
